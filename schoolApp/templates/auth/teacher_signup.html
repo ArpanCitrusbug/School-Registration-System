@@ -39,6 +39,11 @@
             <span class="error-form" id="username-error-message" style="color: red;"></span>
         </div>
 
+        <div class="mb-3" style="padding-left: 650px;">
+            <label class="form-label">Phone Number</label>
+            <input type="text" name="phone" class="form-control" style="width: 450px;" id="form-phone" required>
+            <span class="error-form" id="phone-error-message" style="color: red;"></span>
+        </div>
 
         <div class="mb-3" style="padding-left: 650px;">
             <label class="form-label">Email address</label>
@@ -82,6 +87,7 @@
     $(function () {
         $("#fname-error-message").hide();
         $("#lname-error-message").hide();
+        $("#phone-error-message").hide();
         $("#username-error-message").hide();
         $("#email-error-message").hide();
         $("#password-error-message").hide();
@@ -91,6 +97,7 @@
         var error_fname = false;
         var error_lname = false;
         var error_username = false;
+        var error_phone = false;
         var error_email = false;
         var error_password = false;
         var error_confirmpassword = false;

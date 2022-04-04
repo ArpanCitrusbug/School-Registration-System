@@ -25,16 +25,16 @@ class TeacherSignUpView(View):
         lastname = request.POST['lastname']
         username = request.POST['username']
         password1 = request.POST['password1']
+        phone = request.POST['phone']
         email = request.POST['email']
         password2 = request.POST['password2']
         if len(firstname) != 0 and len(lastname) != 0 and len(username) != 0 and len(password1) != 0 and len(
-                email) != 0 and len(password2) != 0:
+                email) != 0 and len(password2) != 0 and len(phone) != 0:
             if not Teacher.objects.filter(username=username).exists():
                 if password1 == password2:
                     teacher = Teacher.objects.create(first_name=firstname, last_name=lastname, username=username,
-                                               password=make_password(password1), email=email)
+                                               password=make_password(password1), email=email, phone=phone)
                     teacher.save()
-                    # user.set_password(password1)
                     return redirect('MainBody')
                 else:
                     messages.error(request, "Password Doesn't Match")
