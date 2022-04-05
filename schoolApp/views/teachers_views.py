@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect
 from django.views.generic import *
 from django.contrib import messages
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
+from django.contrib import auth
+from schoolApp.models import Teacher, School
 
-from schoolApp.models import Teacher
 
 # Create your views here.
 class IndexView(View):
@@ -11,13 +12,13 @@ class IndexView(View):
         return render(request, 'index.html')
 
 
+
 class TeacherSignUpView(View):
     def get(self, request):
-        if request.user.is_authenticated:
             return render(request, 'teacher_signup.html')
 
-        else:
-            return render(request, 'index.html')
+
+            # return render(request, 'index.html')
     # return redirect('login')
 
     def post(self, request):
@@ -35,7 +36,7 @@ class TeacherSignUpView(View):
                     teacher = Teacher.objects.create(first_name=firstname, last_name=lastname, username=username,
                                                password=make_password(password1), email=email, phone=phone)
                     teacher.save()
-                    return redirect('MainBody')
+                    return redirect('/teacherlogin/')
                 else:
                     messages.error(request, "Password Doesn't Match")
             else:
@@ -43,3 +44,31 @@ class TeacherSignUpView(View):
         else:
             messages.info(request, "All fields are Required")
         return render(request, 'index.html')
+
+
+class TeacherLogInView(View):
+    
+    def get(self, request):
+        return render(request, 'teacherlogin.html')
+        
+    def post(self, request):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        teacher = Teacher.objects.get(username=username)
+        print(teacher.password)
+        password_check = check_password(password, teacher.password)
+        if password_check:
+            auth.login(request, teacher)
+            return redirect('TeacherMainBody')
+        return render(request, 'teacher_mainbody.html')
+
+
+
+class TeacherMainBodyView(View):
+    def get(self, request):
+        school = School.objects.all()
+
+        context = {
+                "schools":school,
+            }
+        return render(request, 'teacher_mainbody.html', context)

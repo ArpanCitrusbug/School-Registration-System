@@ -10,11 +10,11 @@
 
 {% block body %}
 <div class="container-fluid">
-    <h1 class="sign_in" style="padding: 15px; padding-left: 790px;">Sign In</h1>
+    <h1 class="sign_in" style="padding: 15px; padding-left: 790px;">Teacher's Sign In</h1>
 
 
 
-    <form class="row g-3" action="{% url 'home' %}" onsubmit="" id="signup_form" method="POST">
+    <form class="row g-3" onsubmit="" id="signup_form" method="POST">
         {% csrf_token %}
 
         <div class="mb-3" style="padding-left: 650px;">
@@ -41,7 +41,7 @@
 
         <div class="mb-3" style="padding-left: 650px;">
             <label class="form-label">Phone Number</label>
-            <input type="text" name="phone" class="form-control" style="width: 450px;" id="form-phone" required>
+            <input type="tel" name="phone" class="form-control" style="width: 450px;" id="form-phone" required>
             <span class="error-form" id="phone-error-message" style="color: red;"></span>
         </div>
 
@@ -74,7 +74,7 @@
 
 
         <div style="text-align: center; padding-top: 10px;">
-            <p>Already a user? <a href="/login">Log In</a></p>
+            <p>Already a user? <a href="/teacherlogin/">Log In</a></p>
         </div>
     </form>
 
@@ -110,6 +110,9 @@
         });
         $("form-username").focusout(function () {
             check_username();
+        });
+        $("form-phone").focusout(function () {
+            check_phone();
         });
         $("form-email").focusout(function () {
             check_email();
@@ -177,6 +180,20 @@
         }
 
 
+        function check_phone() {
+            // var pattern = /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/
+            var phone_length = $("#form-phone").val();
+            console.log(typeof phone_length);
+            if (phone_length !== 10 && isNaN(phone_length)) {
+                $("#phone-error-message").html("Only 10 numbers can be given.");
+                $("#phone-error-message").show();
+                error_phone = true;
+            } else {
+                $("phone-error-message").hide();
+            }
+        }
+
+
         function check_password() {
             var password_length = $("#form-password");
             if (password_length >= 8) {
@@ -202,9 +219,11 @@
         }
 
         $("#signup_form").submit(function () {
+            // debugger;
             error_fname = false;
             error_lname = false;
             error_username = false;
+            error_phone = false;
             error_email = false;
             error_password = false;
             error_confirmpassword = false;
@@ -212,11 +231,12 @@
             check_fname();
             check_lname();
             check_username();
+            check_phone();
             check_email();
             check_password();
             check_confirmpassword();
 
-            if (error_fname === false && error_lname === false && error_username === false && error_email === false && error_password === false && error_confirmpassword === false) {
+            if (error_fname === false && error_lname === false && error_username === false && error_phone === false && error_email === false && error_password === false && error_confirmpassword === false) {
                 alert("Registration Successfull");
                 return true;
             } else {

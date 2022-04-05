@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Teacher's HomePage
+{% endblock %}
+
+
+
+{% block body %}
+
+
+<div class="row row-cols-3">
+
+    {% for i in schools %}
+    <div class="col">
+        <div class="card-group">
+            <div class="card">
+                <div class="card-body">
+                    <a style=" text-decoration: none;" href="">
+                        <h1 style="color: black;">{{i.school_name}}</h1>
+                    </a></h5>
+                    <a style=" text-decoration: none;" href="">
+                        <h3 class="card-category">{{i.admin_id}}</h2>
+                    </a>
+                    {%for j in i.class_field.all%}
+                    {{j.standard}} <br>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+{% endblock %}
