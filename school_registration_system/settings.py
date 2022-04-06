@@ -50,6 +50,8 @@ TEMPLATES = [
         'DIRS': ['schoolApp/templates/auth',
         'schoolApp/templates/student',
         'schoolApp/templates/teacher',
+        'schoolApp/templates/school',
+        'schoolApp/templates/class',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

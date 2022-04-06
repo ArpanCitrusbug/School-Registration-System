@@ -46,17 +46,26 @@ class StudentLogInView(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
         student = Student.objects.get(username=username)
-        print(student.password)
+        id = student.pk
         password_check = check_password(password, student.password)
-        if password_check:
-            auth.login(request, student)
-            return render(request,'student_mainbody.html')
-        return render(request, 'student_login.html')
+        print(password_check)
+
+        auth.login(request, student)
+        return redirect(f'/student_mainbody/{id}')
+    
+
+class StudentLogout(View):
+    def get(self, request):
+        auth.logout(request)
+        return redirect('StudentLogIn')
 
 
 class StudentMainBodyView(View):
-    def get(self, request):
-        if request.user.is_authenticated:
-            return redirect('/studentmainbody/')
-        else:
-            return render('student_signup.html')
+    def get(self, request, id):
+        student = Student.objects.get(id=id)
+        print(student)
+        context ={
+            "student":student,
+        }
+        return render(request,'student_mainbody.html',context)
+        

@@ -3,7 +3,8 @@ from django.views.generic import *
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import auth
-from schoolApp.models import Teacher, School
+from schoolApp.models import Teacher, School,Class
+# from schoolApp.forms import AddSchoolForm
 
 
 # Create your views here.
@@ -67,8 +68,49 @@ class TeacherLogInView(View):
 class TeacherMainBodyView(View):
     def get(self, request):
         school = School.objects.all()
-
         context = {
                 "schools":school,
             }
         return render(request, 'teacher_mainbody.html', context)
+
+
+class TeacherSchoolDetailedView(View):
+    def get(self, request, id):
+        school = School.objects.get(id=id)
+        class_name = Class.objects.filter(id = id)
+        context = {
+                "school":school,
+                "class":class_name,
+            }
+        return render(request, 'teacher_school_detail.html',context)
+
+
+
+class TeacherSchoolCreateView(CreateView):
+    # def get(self, request):
+    #     form = AddSchoolForm
+    #     return render(request, 'schoolform.html',{'form':form})
+    model = School
+    # formclass=AddSchoolForm
+    template_name ="schoolform.html"
+    success_url = "/teacher_mainbody"
+    fields = '__all__'
+
+    # def post(self, request):
+    #     school_name = request.POST['school_name']
+    #     address = request.POST['address']
+    #     school_phone = request.POST['school_phone']
+    #     teacher_id = request.POST['teacher_id']
+    #     # class_field = request.POST['class_field']
+        
+    #     teacher_id=Teacher.objects.filter(pk = teacher_id)
+    #     post = School.objects.create(school_name=school_name, address=address, school_phone=school_phone,
+    #                                    teacher_id=teacher_id.set(), admin_id = request.user)
+    #     post.save()
+    #     return redirect('TeacherMainBody')
+
+
+class TeacherLogout(View):
+    def get(self, request):
+        auth.logout(request)
+        return redirect('TeacherLogIn')

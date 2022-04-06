@@ -58,11 +58,10 @@ class Student(AbstractBaseUser):
     REQUIRED_FIELDS = ["username"]
 
 
-
 class Class(models.Model):
     standard = models.IntegerField(blank= True)
     division = models.CharField(max_length=10)
-    access_code = models.CharField(max_length=10)
+    access_code = models.CharField(max_length=10, unique=True)
     student_name = models.ManyToManyField(Student)
     teacher_name = models.ManyToManyField(Teacher)
 
@@ -76,10 +75,16 @@ class School(models.Model):
     school_phone = models.CharField(max_length=15, blank=True)
     teacher_id = models.ManyToManyField(Teacher,related_name='teacher_info')
     admin_id = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, related_name="admin_info")
-    class_field = models.ManyToManyField(Class)
+    class_field = models.ManyToManyField(Class, null=True)
 
     def __str__(self):
         return self.school_name
+
+
+
+
+
+
 
 # class TeachersLog(models.Model):
 #     school = models.ForeignKey(School, on_delete=models.CASCADE)

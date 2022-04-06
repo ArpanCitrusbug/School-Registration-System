@@ -28,7 +28,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/home">School Registration Site</a>
+            <a class="navbar-brand" href="/teacher_mainbody">School Registration Site</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -39,25 +39,23 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        Profile
+                        Create
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="">Add School</a>
+                        <li><a class="dropdown-item" href="{% url 'TeacherClassCreate' %}">Add Class</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'TeacherSchoolCreate' %}">Add School</a>
                         </li>
                         <!-- <li><a class="dropdown-item" href="">Add Blog</a></li> -->
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="">Log Out</a></li>
+                        <li><a class="dropdown-item" href="/teacher_logout">Log Out</a></li>
                     </ul>
                 </li>
             </ul>
             
-            <form class="d-flex" method="POST" action="">
-                {% csrf_token %}
-                <input class="form-control me-2" type="search" placeholder="Search Title" name="searched" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+
 
         </div>
     </nav>
