@@ -21,6 +21,7 @@ urlpatterns = [
     path('student_login/',StudentLogInView.as_view(), name='StudentLogIn'),
     path('student_mainbody/<int:id>',StudentMainBodyView.as_view(), name="StudentMainBody"),
     path('student_logout/', StudentLogout.as_view(), name="StudentLogout"),
+    path('student_acces_code_search/',StudentAccessCodeSearchView.as_view(), name="StudentAccessCodeSearch"),
 
 
 #School's URL
