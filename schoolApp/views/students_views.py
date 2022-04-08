@@ -1,3 +1,4 @@
+from tkinter import E
 from django.shortcuts import render,redirect
 from django.views.generic import *
 from django.contrib import messages
@@ -7,12 +8,16 @@ from django.db.models import Q
 from schoolApp.models import *
 from django.core import serializers
 from django.http import JsonResponse
+from schoolApp.forms import UpdateStudentForm
 
 
 
 class StudentSignUpView(View):
     def get(self, request):
-        return render(request, 'student_signup.html')
+        if request.user.is_authenticated:
+            return redirect('StudentMainBody')
+        else:
+            return render(request,'student_signup.html')
 
     def post(self, request):
         firstname = request.POST['firstname']
@@ -42,7 +47,8 @@ class StudentSignUpView(View):
 
 class StudentLogInView(View):
     def get(self, request):
-        return render(request, 'student_login.html')
+         return render(request,'student_login.html')
+
         
 
     def post(self, request):
@@ -66,13 +72,11 @@ class StudentLogout(View):
 class StudentMainBodyView(View):
     def get(self, request,id):
         student = Student.objects.get(id=id)
-        
-        
-
         context ={
             "student":student,
-        }
+            }
         return render(request,'student_mainbody.html',context)
+
 
 
 class StudentAccessCodeSearchView(View):
@@ -96,15 +100,22 @@ class StudentAccessCodeSearchView(View):
             return JsonResponse(context,safe=False)
 
 
+class StudentUpdateView(View):
+    def get(self,request,id):
+        # if request.user.is_authenticated:
+            form = UpdateStudentForm
+            return render(request, 'update_student.html',{'form':form}) 
+        # else:
+            # return render(request,'student_login.html')
 
-
-
-
-
-
-    # def get(self,request):
-    #     searched = request.GET['searched']
-    #     classs = Class.objects.filter(Q(access_code__icontains=searched))
-    #     return render(request,'student_mainbody.html',{'searched':searched,
-    #     'classs':classs})
-        
+    def post(self,request,id):
+        print(request.POST)
+        student = Student.objects.get(pk=id)
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        student.first_name =first_name
+        student.last_name =last_name
+        student.email =email
+        student.save()
+        return redirect(f'/student_mainbody/{id}')

@@ -28,6 +28,8 @@
     <div style="padding-left: 900px;"><a
             style="text-decoration: none;background-color: red; border-radius: 4px; border: 3px; color: white;"
             href="/student_logout">Log Out</a></div>
+            <a href="{% url 'StudentUpdate' student.id %}"><button type="button" class="btn btn-primary">Edit
+                Profile</button></a>
     <hr>
     <h5 style="text-align: center;"> Logged-in User: <span
             style="text-align: center; color: white; background-color: green;">{{student.username}}</span></h5>
@@ -53,6 +55,7 @@
     <!-- AJAX Validations -->
     <script>
         $('#button').on('click', function () {
+            
             $('.access_code_div').css("display","none")
             let searched = $('#search').val();
             $.ajax({
@@ -61,6 +64,7 @@
                 data: { searched: searched },
                 success: function (data) {
                     // let a = JSON.parse(data['class_student_list_json'])
+                    // console.log(data['class_student_list_json']);
                     console.log(data);
                     var st = [];
                     console.log('SUCCESS');

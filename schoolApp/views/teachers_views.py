@@ -4,19 +4,31 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import auth
 from schoolApp.models import Teacher, School,Class
-# from schoolApp.forms import AddSchoolForm
-
 
 # Create your views here.
 class IndexView(View):
     def get(self, request):
-        return render(request, 'index.html')
+        return render(request,'index.html')
+    # def get(self, request):
+    #     if request.user.is_authenticated:
+    #         school = School.objects.all()
+    #         context = {
+    #             "schools":school,
+    #         }
+    #         return render(request, 'teacher_mainbody.html', context)
+    #     else:
+    #         return redirect("TeacherLogIn")
 
 
 
 class TeacherSignUpView(View):
+
     def get(self, request):
-            return render(request, 'teacher_signup.html')
+        if request.user.is_authenticated:
+            return redirect('TeacherMainBody')
+        else:
+            return render(request,"teacher_signup.html")
+        # return render(request, 'teacher_signup.html')
 
 
             # return render(request, 'index.html')
@@ -48,9 +60,11 @@ class TeacherSignUpView(View):
 
 
 class TeacherLogInView(View):
-    
     def get(self, request):
-        return render(request, 'teacherlogin.html')
+        if request.user.is_authenticated:
+            return render(request, 'teacher_mainbody.html')
+        else:
+            return render(request,"teacherlogin.html")
         
     def post(self, request):
         username = request.POST.get('username')
@@ -67,23 +81,28 @@ class TeacherLogInView(View):
 
 class TeacherMainBodyView(View):
     def get(self, request):
-        school = School.objects.all()
-        context = {
+        if request.user.is_authenticated:
+            school = School.objects.all()
+            context = {
                 "schools":school,
             }
-        return render(request, 'teacher_mainbody.html', context)
+            return render(request, 'teacher_mainbody.html', context)
+        else:
+            return redirect("TeacherLogIn")
 
 
 class TeacherSchoolDetailedView(View):
     def get(self, request, id):
-        school = School.objects.get(id=id)
-        class_name = Class.objects.filter(id = id)
-        context = {
+        if request.user.is_authenticated:
+            school = School.objects.get(id=id)
+            class_name = Class.objects.filter(id = id)
+            context = {
                 "school":school,
                 "class":class_name,
             }
-        return render(request, 'teacher_school_detail.html',context)
-
+            return render(request, 'teacher_school_detail.html',context)
+        else:
+            return redirect("TeacherLogIn")
 
 
 class TeacherSchoolCreateView(CreateView):
@@ -113,4 +132,4 @@ class TeacherSchoolCreateView(CreateView):
 class TeacherLogout(View):
     def get(self, request):
         auth.logout(request)
-        return redirect('TeacherLogIn')
+        return render(request,'teacherlogin.html')

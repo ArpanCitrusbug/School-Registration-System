@@ -2,7 +2,6 @@ from django.urls import path
 from schoolApp.views.classes_views import *
 from schoolApp.views.schools_views import *
 from schoolApp.views.students_views import *
-from schoolApp.views.teachers_log_views import *
 from schoolApp.views.teachers_views import *
 
 
@@ -11,9 +10,11 @@ urlpatterns = [
     path('', IndexView.as_view(), name="Index"),
     path('teachersignup/',TeacherSignUpView.as_view(), name="TeacherSignUp"),
     path('teacherlogin/',TeacherLogInView.as_view(), name='TeacherLogIn'),
-    path('teacher_mainbody/',TeacherMainBodyView.as_view(), name="TeacherMainBody"),
+    path('teacher_mainbody/',(TeacherMainBodyView.as_view()), name="TeacherMainBody"),
     path('teacher_school_detail/<int:id>',TeacherSchoolDetailedView.as_view(), name="TeacherDetailed"),
     path('teacher_logout/', TeacherLogout.as_view(), name="TeacherLogout"),
+    path('teacher_class_update/<pk>',TeacherClassUpdateView.as_view(),name="TeacherClassUpdate"),
+    path('teacher_student_update/<pk>',TeacherStudentUpdateView.as_view(),name="TeacherStudentUpdate"),
 
 
 #Student's URL
@@ -22,6 +23,7 @@ urlpatterns = [
     path('student_mainbody/<int:id>',StudentMainBodyView.as_view(), name="StudentMainBody"),
     path('student_logout/', StudentLogout.as_view(), name="StudentLogout"),
     path('student_acces_code_search/',StudentAccessCodeSearchView.as_view(), name="StudentAccessCodeSearch"),
+    path('student_update/<int:id>',StudentUpdateView.as_view(),name="StudentUpdate"),
 
 
 #School's URL

@@ -45,6 +45,9 @@ class Teacher(AbstractBaseUser,PermissionsMixin):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
+    @property
+    def is_authenticated(self):
+        return True
 
 
 
