@@ -8,14 +8,16 @@ from django.db.models import Q
 from schoolApp.models import *
 from django.core import serializers
 from django.http import JsonResponse
+# from django.contrib.auth.decorators import login_required
 from schoolApp.forms import UpdateStudentForm
+
 
 
 
 class StudentSignUpView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            return redirect('StudentMainBody')
+            return redirect(f'/student_mainbody/{id}')
         else:
             return render(request,'student_signup.html')
 
@@ -32,7 +34,8 @@ class StudentSignUpView(View):
             if not Student.objects.filter(username=username).exists():
                 if password1 == password2:
                     student = Student.objects.create(first_name=firstname, last_name=lastname, username=username,
-                                               password=make_password(password1), email=email, phone=phone)
+                                                email=email, phone=phone)
+                    student.set_password(password1)
                     student.save()
                     return redirect('/student_login/')
                 else:
@@ -49,18 +52,17 @@ class StudentLogInView(View):
     def get(self, request):
          return render(request,'student_login.html')
 
-        
-
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
+        # print(auth.login(request,student))
         student = Student.objects.get(username=username)
         id = student.pk
-        password_check = check_password(password, student.password)
-        # print(password_check)
-
-        auth.login(request, student)
-        return redirect(f'/student_mainbody/{id}')
+        password_check = check_password(password, student.password)        
+        if password_check:
+            auth.login(request, student)
+            print(auth.login(request, student))
+            return redirect(f'/student_mainbody/{id}')
     
 
 class StudentLogout(View):
@@ -71,6 +73,7 @@ class StudentLogout(View):
 
 class StudentMainBodyView(View):
     def get(self, request,id):
+        # print(request.user.is_authenticated)
         student = Student.objects.get(id=id)
         context ={
             "student":student,

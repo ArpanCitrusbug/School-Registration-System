@@ -1,6 +1,8 @@
 from pathlib import Path
 # from schoolApp import models
 import os
+# from django.contrib.auth.middleware import AuthenticationMiddleware
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -131,3 +133,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # STATICFILES_DIRS = [
 #      os.path.join(BASE_DIR, "BlogSite\customadmin\static"),
 # ]
+
+LOGIN_URL = "/student_login"

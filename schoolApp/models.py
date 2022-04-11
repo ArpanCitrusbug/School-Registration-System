@@ -51,12 +51,9 @@ class Teacher(AbstractBaseUser,PermissionsMixin):
 
 
 
-class Student(AbstractBaseUser):
-    first_name = models.CharField(max_length=40, blank=True)
-    last_name = models.CharField(max_length=40, blank=True)
-    email = models.EmailField(null=True, blank=True, unique=True)
-    phone = models.CharField(max_length=15, blank=True)
-    username = models.CharField(max_length=40, blank=True, null=True,default='')
+class Student(Teacher):
+    is_student = models.BooleanField(default=True)
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
 
@@ -65,8 +62,8 @@ class Class(models.Model):
     standard = models.IntegerField(blank= True)
     division = models.CharField(max_length=10)
     access_code = models.CharField(max_length=10, unique=True)
-    student_name = models.ManyToManyField(Student)
-    teacher_name = models.ManyToManyField(Teacher)
+    student_name = models.ManyToManyField(Student,related_name="student_class")
+    teacher_name = models.ManyToManyField(Teacher, related_name="teacher_class")
 
     def __str__(self):
         return self.access_code
@@ -78,7 +75,7 @@ class School(models.Model):
     school_phone = models.CharField(max_length=15, blank=True)
     teacher_id = models.ManyToManyField(Teacher,related_name='teacher_info')
     admin_id = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, related_name="admin_info")
-    class_field = models.ManyToManyField(Class, null=True)
+    class_field = models.ManyToManyField(Class)
 
     def __str__(self):
         return self.school_name
@@ -94,4 +91,3 @@ class School(models.Model):
 #     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 #     created_on = models.DateTimeField(auto_now_add=True)
 
-    

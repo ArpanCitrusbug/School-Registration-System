@@ -47,7 +47,8 @@ class TeacherSignUpView(View):
             if not Teacher.objects.filter(username=username).exists():
                 if password1 == password2:
                     teacher = Teacher.objects.create(first_name=firstname, last_name=lastname, username=username,
-                                               password=make_password(password1), email=email, phone=phone)
+                                                email=email, phone=phone)
+                    teacher.set_password(password1)
                     teacher.save()
                     return redirect('/teacherlogin/')
                 else:

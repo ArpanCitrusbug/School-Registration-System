@@ -10,7 +10,7 @@
 
 
 {% block body %}
-
+{{request.user.is_authenticated }}
 <form method="post" style="padding-left: 730px;">
     {% csrf_token %}
     <div class="form-group" style="padding-top: 60px;">
