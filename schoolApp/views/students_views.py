@@ -1,14 +1,12 @@
-from tkinter import E
 from django.shortcuts import render,redirect
 from django.views.generic import *
 from django.contrib import messages
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import check_password
 from django.contrib import auth
 from django.db.models import Q
 from schoolApp.models import *
 from django.core import serializers
 from django.http import JsonResponse
-# from django.contrib.auth.decorators import login_required
 from schoolApp.forms import UpdateStudentForm
 
 
@@ -17,7 +15,7 @@ from schoolApp.forms import UpdateStudentForm
 class StudentSignUpView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            return redirect(f'/student_mainbody/{id}')
+            return redirect(f'/student_mainbody/{request.user.pk}')
         else:
             return render(request,'student_signup.html')
 
@@ -26,6 +24,7 @@ class StudentSignUpView(View):
         lastname = request.POST['lastname']
         username = request.POST['username']
         password1 = request.POST['password1']
+        age = request.POST['age']
         phone = request.POST['phone']
         email = request.POST['email']
         password2 = request.POST['password2']
@@ -34,7 +33,7 @@ class StudentSignUpView(View):
             if not Student.objects.filter(username=username).exists():
                 if password1 == password2:
                     student = Student.objects.create(first_name=firstname, last_name=lastname, username=username,
-                                                email=email, phone=phone)
+                                                email=email, phone=phone, age=age,is_student=True)
                     student.set_password(password1)
                     student.save()
                     return redirect('/student_login/')
@@ -56,13 +55,15 @@ class StudentLogInView(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
         # print(auth.login(request,student))
+        print(username)
         student = Student.objects.get(username=username)
-        id = student.pk
-        password_check = check_password(password, student.password)        
+        print(student)
+        password_check = check_password(password, student.password)  
+        print(password_check)      
         if password_check:
             auth.login(request, student)
             print(auth.login(request, student))
-            return redirect(f'/student_mainbody/{id}')
+            return redirect(f'/student_mainbody/{student.pk}')
     
 
 class StudentLogout(View):
@@ -73,34 +74,48 @@ class StudentLogout(View):
 
 class StudentMainBodyView(View):
     def get(self, request,id):
-        # print(request.user.is_authenticated)
-        student = Student.objects.get(id=id)
-        context ={
-            "student":student,
-            }
-        return render(request,'student_mainbody.html',context)
+        student = Student.objects.get(is_student= True ,id=id)
+        print(student,"************")
+        if not student.access_token:
+            
+            print(student)
+            context ={
+                "student":student,
+                }
+            return render(request,'student_mainbody.html',context)
+        else:
+            return redirect("StudentAccessCodeSearch")
 
 
 
 class StudentAccessCodeSearchView(View):
         def get(self, request):
-            searched = request.GET.get('searched')
-            product_searched = Class.objects.filter(access_code__icontains=searched)
+            student=Student.objects.get(pk=request.user.pk)
+            if not student.access_token: 
+                searched = request.GET.get('searched')
+                
+                print(student.access_token,"***")
+                student.access_token=searched
+                student.save()
+                
+                product_searched = Classs.objects.filter(access_code__icontains=searched)
+            else:
+                product_searched = Classs.objects.filter(access_code__icontains=student.access_token)
             for i in product_searched:
                 student_list = [j.username for j  in i.student_name.all()]
-            for i in product_searched:
-                teacher_list = [j.username for j  in i.teacher_name.all()]
-            print(teacher_list)
-            # class_student_list=Student.objects.filter(username__in=student_list)
-            
-            product_searched_json = serializers.serialize('json', product_searched)
-            # class_student_list_json = serializers.serialize('json', class_student_list)
-            context={
-                "class_student_list_json":student_list,
-                "teacher_list_json":teacher_list,
-                "product_searched_json":product_searched_json,
-            }
-            return JsonResponse(context,safe=False)
+                for i in product_searched:
+                    teacher_list = [j.username for j  in i.teacher_name.all()]
+                # print(teacher_list)
+                # class_student_list=Student.objects.filter(username__in=student_list)
+                
+                product_searched_json = serializers.serialize('json', product_searched)
+                # class_student_list_json = serializers.serialize('json', class_student_list)
+                context={
+                    "class_student_list_json":student_list,
+                    "teacher_list_json":teacher_list,
+                    "product_searched_json":product_searched_json,
+                }
+                return JsonResponse(context,safe=False)
 
 
 class StudentUpdateView(View):

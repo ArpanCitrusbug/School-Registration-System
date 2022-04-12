@@ -9,6 +9,7 @@
 
 
 {% block body %}
+<button><a style="text-decoration: none;" href="/"><h3>Index Page</h3></a></button>
 <div class="container-fluid">
     <h1 class="sign_in" style="padding: 15px; padding-left: 790px;">Student's Sign In</h1>
 
@@ -17,7 +18,7 @@
     <form class="row g-3" onsubmit="" id="signup_form" method="POST">
         {% csrf_token %}
 
-        <div class="mb-3" style="padding-left: 650px;">
+        <div class="mb-3-flex" style="padding-left: 650px;">
             <label for="firstname" class="form-label">
                 First Name
             </label>
@@ -26,33 +27,39 @@
         </div>
 
 
-        <div class="mb-3" style="padding-left: 650px;">
+        <div class="mb-3-flex" style="padding-left: 650px;">
             <label for="lastname" class="form-label">Last Name</label>
             <input type="text" name="lastname" class="form-control" style="width: 450px;" id="form-lname" required>
             <span class="error-form" id="lname-error-message" style="color: red;"></span>
         </div>
 
 
-        <div class="mb-3" style="padding-left: 650px;">
+        <div class="mb-3-flex" style="padding-left: 650px;">
             <label class="form-label">Username</label>
             <input type="text" name="username" class="form-control" style="width: 450px;" id="form-username" required>
             <span class="error-form" id="username-error-message" style="color: red;"></span>
         </div>
 
-        <div class="mb-3" style="padding-left: 650px;">
+        <div class="mb-3-flex" style="padding-left: 650px;">
             <label class="form-label">Phone Number</label>
             <input type="tel" name="phone" class="form-control" style="width: 450px;" id="form-phone" required>
             <span class="error-form" id="phone-error-message" style="color: red;"></span>
         </div>
 
-        <div class="mb-3" style="padding-left: 650px;">
+        <div class="mb-3-flex" style="padding-left: 650px;">
+            <label class="form-label">Age</label>
+            <input type="tel" name="age" class="form-control" style="width: 450px;" id="form-age" required>
+            <span class="error-form" id="age-error-message" style="color: red;"></span>
+        </div>
+
+        <div class="mb-3-flex" style="padding-left: 650px;">
             <label class="form-label">Email address</label>
             <input type="email" name="email" class="form-control" style="width: 450px;"  id="form-email" required>
             <span class="error-form" style="color: red;" id="email-error-message"></span>
         </div>
 
 
-        <div class="mb-3" style="padding-left: 650px;">
+        <div class="mb-3-flex" style="padding-left: 650px;">
             <label for="exampleInputPassword1" class="form-label">Password</label>
             <input type="password" name="password1" class="form-control" style="width: 450px;" id="form-password"
                 required>
@@ -60,7 +67,7 @@
         </div>
 
 
-        <div class="mb-3" style="padding-left: 650px;">
+        <div class="mb-3-flex" style="padding-left: 650px;">
             <label for="exampleInputPassword2" class="form-label">Confirm Password</label>
             <input type="password" name="password2" class="form-control" style="width: 450px;" id="form-confirmpassword"
                 required>

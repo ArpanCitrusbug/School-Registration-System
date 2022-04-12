@@ -3,7 +3,7 @@ from django.views.generic import *
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import auth
-from schoolApp.models import Teacher, School,Class
+from schoolApp.models import *
 
 # Create your views here.
 class IndexView(View):
@@ -73,10 +73,13 @@ class TeacherLogInView(View):
         teacher = Teacher.objects.get(username=username)
         print(teacher.password)
         password_check = check_password(password, teacher.password)
+        # print(password_check)
+        print(password_check)
         if password_check:
             auth.login(request, teacher)
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             return redirect('TeacherMainBody')
-        return render(request, 'teacher_mainbody.html')
+        # return render(request, 'teacher_mainbody.html')
 
 
 
@@ -87,6 +90,7 @@ class TeacherMainBodyView(View):
             context = {
                 "schools":school,
             }
+            print(request.user.username)
             return render(request, 'teacher_mainbody.html', context)
         else:
             return redirect("TeacherLogIn")
@@ -96,7 +100,7 @@ class TeacherSchoolDetailedView(View):
     def get(self, request, id):
         if request.user.is_authenticated:
             school = School.objects.get(id=id)
-            class_name = Class.objects.filter(id = id)
+            class_name = Classs.objects.filter(id = id)
             context = {
                 "school":school,
                 "class":class_name,
@@ -106,28 +110,12 @@ class TeacherSchoolDetailedView(View):
             return redirect("TeacherLogIn")
 
 
-class TeacherSchoolCreateView(CreateView):
-    # def get(self, request):
-    #     form = AddSchoolForm
-    #     return render(request, 'schoolform.html',{'form':form})
-    model = School
-    # formclass=AddSchoolForm
-    template_name ="schoolform.html"
-    success_url = "/teacher_mainbody"
-    fields = '__all__'
+# class TeacherSchoolCreateView(CreateView):
+#     model = School
+#     template_name ="schoolform.html"
+#     success_url = "/teacher_mainbody"
+#     fields = '__all__'
 
-    # def post(self, request):
-    #     school_name = request.POST['school_name']
-    #     address = request.POST['address']
-    #     school_phone = request.POST['school_phone']
-    #     teacher_id = request.POST['teacher_id']
-    #     # class_field = request.POST['class_field']
-        
-    #     teacher_id=Teacher.objects.filter(pk = teacher_id)
-    #     post = School.objects.create(school_name=school_name, address=address, school_phone=school_phone,
-    #                                    teacher_id=teacher_id.set(), admin_id = request.user)
-    #     post.save()
-    #     return redirect('TeacherMainBody')
 
 
 class TeacherLogout(View):

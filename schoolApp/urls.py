@@ -28,16 +28,9 @@ urlpatterns = [
 
 
 #School's URL
-    path('school_create/',TeacherSchoolCreateView.as_view(),name='TeacherSchoolCreate'),
+    path('school_create/',CreateSchoolView.as_view(),name='TeacherSchoolCreate'),
 
 
 #Class' URL
     path('class_create/',TeacherClassCreateView.as_view(),name='TeacherClassCreate'),
 ]
-
-
-
-
-
-#student mainbody ajax request
-#change access id of student

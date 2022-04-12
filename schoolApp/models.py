@@ -37,6 +37,8 @@ class Teacher(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(null=True, blank=True, unique=True)
     phone = models.CharField(max_length=15)
     username = models.CharField(max_length=40, blank=True, null=True,default='')
+    is_student = models.BooleanField(default=False)
+    has_school = models.BooleanField(default=False)
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -52,13 +54,14 @@ class Teacher(AbstractBaseUser,PermissionsMixin):
 
 
 class Student(Teacher):
-    is_student = models.BooleanField(default=True)
+    age = models.IntegerField(blank=True)
+    access_token = models.CharField(max_length=10)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
 
 
-class Class(models.Model):
+class Classs(models.Model):
     standard = models.IntegerField(blank= True)
     division = models.CharField(max_length=10)
     access_code = models.CharField(max_length=10, unique=True)
@@ -74,20 +77,8 @@ class School(models.Model):
     address = models.CharField(max_length=100)
     school_phone = models.CharField(max_length=15, blank=True)
     teacher_id = models.ManyToManyField(Teacher,related_name='teacher_info')
-    admin_id = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, related_name="admin_info")
-    class_field = models.ManyToManyField(Class)
+    admin_id = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, related_name="admin_info",unique=True)
+    class_field = models.ManyToManyField(Classs)
 
     def __str__(self):
         return self.school_name
-
-
-
-
-
-
-
-# class TeachersLog(models.Model):
-#     school = models.ForeignKey(School, on_delete=models.CASCADE)
-#     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-#     created_on = models.DateTimeField(auto_now_add=True)
-
