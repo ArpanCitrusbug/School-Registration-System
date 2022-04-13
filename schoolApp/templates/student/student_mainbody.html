@@ -20,24 +20,36 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>{% block title %}
         {% endblock %}</title>
-
+<style>
+    .ahello{
+        display: none;
+    }
+</style>
 </head>
 
 <body>
     <h1 style="color: blue; text-align: center; padding: 20px;">Student View</h1>
-    <div style="padding-left: 900px;"><a
-            style="text-decoration: none;background-color: red; border-radius: 4px; border: 3px; color: white;"
-            href="/student_logout">Log Out</a></div>
+    <div class="buttonlogout" style="padding-left: 910px; padding-top: 50px;">
+        <a href="/student_logout/"><button type="button" class="btn btn-danger">Log Out</button></a>
+     </div>
             <a href="{% url 'StudentUpdate' request.user.id %}"><button type="button" class="btn btn-primary">Edit
                 Profile</button></a>
     <hr>
+
     <h5 style="text-align: center;"> Logged-in User: <span
             style="text-align: center; color: white; background-color: green;">{{student.username}}</span></h5>
     <form class="d-flex" method="get" style="padding-left: 820px; padding-top: 100px;">
         <div class="access_code_div">
+            <div class="access-code">
             <input class="form" type="search" placeholder="Enter Access Code Here" name="searched" id="search">
             <div class="pad" style="padding-left: 15px;">
                 <button id="button" class="btn btn-success" type="button">Submit</button>
+            </div>
+            <div class="nextpagelink ahello">
+                <div class="nextpagelink" style="padding-left: 910px; padding-top: 50px;">
+                    <a href="/student_acces_code_search/"><button type="button" class="btn btn-danger">Log Out</button></a>
+                 </div>
+            </div>
             </div>
         </div>
     </form>
@@ -56,7 +68,8 @@
     <script>
         $('#button').on('click', function () {
             
-            $('.access_code_div').css("display","none")
+            $('.access-code').css("display","none")
+            $('.nextpagelink').removeClass("ahello")
             let searched = $('#search').val();
             $.ajax({
                 type: "get",
@@ -92,17 +105,6 @@
                         <h3 style="text-align: center">Student's list: <div style="color: purple; text-align: center;"> ${st[0]} </div></h3>
                      `)
                     }
-
-                    // $('.details').append(`
-                    //     <h1 style="text-align: center;">Details</h1>
-
-                    //     <h3>Teacher's Name: ${d.teacher_name}</h3>
-                    //     <h3>Standard: ${d.standard}</h3>
-                    //     <h3>Division: ${d.division}</h3>
-                    //     <h3>Student's Name: ${d.student_name}</h3>
-                    //     `)
-                    // console.log(st[1],"**********");
-                    // console.log(data,"**********");
                 },
                 failure: function () {
                     console.log('FAIL');

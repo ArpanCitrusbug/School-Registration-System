@@ -6,10 +6,11 @@
 
 
 
-<h1 style="text-align: center;">Teacher's Login</h1>
+<h1 style="text-align: center;">Teacher's Login</h1>{{request.user.is_authenticated }}
 
 
 {% block body %}
+
 <button><a style="text-decoration: none;" href="/"><h3>Index Page</h3></a></button>
 <form method="post" style="padding-left: 730px;">
     {% csrf_token %}

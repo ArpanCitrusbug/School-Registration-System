@@ -55,7 +55,7 @@ class Teacher(AbstractBaseUser,PermissionsMixin):
 
 class Student(Teacher):
     age = models.IntegerField(blank=True)
-    access_token = models.CharField(max_length=10)
+    access_token = models.CharField(max_length=10, null=True,blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]

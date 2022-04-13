@@ -3,10 +3,7 @@ from django.views.generic import *
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.contrib import auth
-from django.db.models import Q
 from schoolApp.models import *
-from django.core import serializers
-from django.http import JsonResponse
 from schoolApp.forms import UpdateStudentForm
 
 
@@ -49,7 +46,10 @@ class StudentSignUpView(View):
 
 class StudentLogInView(View):
     def get(self, request):
-         return render(request,'student_login.html')
+        if request.user.is_authenticated:
+            return redirect(f'/student_mainbody/{request.user.pk}')
+        else:
+            return render(request,'student_login.html')
 
     def post(self, request):
         username = request.POST.get('username')
@@ -74,17 +74,20 @@ class StudentLogout(View):
 
 class StudentMainBodyView(View):
     def get(self, request,id):
-        student = Student.objects.get(is_student= True ,id=id)
-        print(student,"************")
-        if not student.access_token:
-            
-            print(student)
-            context ={
-                "student":student,
-                }
-            return render(request,'student_mainbody.html',context)
+        if request.user.is_authenticated:
+            student = Student.objects.get(is_student= True ,id=id)
+            print(student,"************")
+            if not student.access_token:
+                
+                print(student)
+                context ={
+                    "student":student,
+                    }
+                return render(request,'student_mainbody.html',context)
+            else:
+                return redirect('StudentAccessCodeSearch')
         else:
-            return redirect("StudentAccessCodeSearch")
+            return render(request,'student_login.html')
 
 
 
@@ -93,38 +96,39 @@ class StudentAccessCodeSearchView(View):
             student=Student.objects.get(pk=request.user.pk)
             if not student.access_token: 
                 searched = request.GET.get('searched')
-                
-                print(student.access_token,"***")
                 student.access_token=searched
                 student.save()
                 
-                product_searched = Classs.objects.filter(access_code__icontains=searched)
+                class_object = Classs.objects.get(access_code=searched)
+                class_object.student_name.add(student)
             else:
-                product_searched = Classs.objects.filter(access_code__icontains=student.access_token)
-            for i in product_searched:
-                student_list = [j.username for j  in i.student_name.all()]
-                for i in product_searched:
-                    teacher_list = [j.username for j  in i.teacher_name.all()]
-                # print(teacher_list)
-                # class_student_list=Student.objects.filter(username__in=student_list)
-                
-                product_searched_json = serializers.serialize('json', product_searched)
-                # class_student_list_json = serializers.serialize('json', class_student_list)
-                context={
-                    "class_student_list_json":student_list,
-                    "teacher_list_json":teacher_list,
-                    "product_searched_json":product_searched_json,
-                }
-                return JsonResponse(context,safe=False)
+                class_object = Classs.objects.get(access_code=student.access_token)
+            student_list = class_object.student_name.filter(is_student=True).values_list("username",flat=True)
+            # class_list = 
+            teacher_list = class_object.teacher_name.filter(is_student=False).values_list("username",flat=True)
+            print(teacher_list)
+            print(student_list)
+            # class_student_list=Student.objects.filter(username__in=student_list)
+            
+            # class_object_json = serializers.serialize('json', class_object)
+            # class_student_list_json = serializers.serialize('json', class_student_list)
+            context={
+                "class_student_list_json":student_list,
+                "teacher_list_json":teacher_list,
+                # "class_object_json":class_object_json,
+                "class_list_json":class_object,
+            }
+            # return JsonResponse(context,safe=False)
+            return render(request,'student_details_page.html',context)
 
 
 class StudentUpdateView(View):
     def get(self,request,id):
-        # if request.user.is_authenticated:
+        if request.user.is_authenticated:
             form = UpdateStudentForm
             return render(request, 'update_student.html',{'form':form}) 
-        # else:
-            # return render(request,'student_login.html')
+        else:
+            return render(request,'student_login.html')
 
     def post(self,request,id):
         print(request.POST)

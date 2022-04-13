@@ -1,7 +1,7 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from django.views.generic import *
 from django.contrib import messages
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import check_password
 from django.contrib import auth
 from schoolApp.models import *
 
@@ -24,10 +24,16 @@ class IndexView(View):
 class TeacherSignUpView(View):
 
     def get(self, request):
+        print(request.user)
         if request.user.is_authenticated:
-            return redirect('TeacherMainBody')
+            if request.user.is_student:
+                return HttpResponse("You are not the correct user to access this page.")
+            elif request.user.has_school:
+                return redirect(f'/teacher_school_detail/{request.user.teacher_info.first().id}')   
+            else:
+                return redirect('TeacherMainBody')   
         else:
-            return render(request,"teacher_signup.html")
+            return render(request,"teacher_signup.html") 
         # return render(request, 'teacher_signup.html')
 
 
@@ -63,7 +69,11 @@ class TeacherSignUpView(View):
 class TeacherLogInView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            return render(request, 'teacher_mainbody.html')
+            if request.user.is_student:
+                print(request.user.is_student)
+                return HttpResponse("You are not the correct user to access this page.")    
+            else:
+                return render(request, 'teacher_mainbody.html')
         else:
             return render(request,"teacherlogin.html")
         
@@ -73,10 +83,13 @@ class TeacherLogInView(View):
         teacher = Teacher.objects.get(username=username)
         print(teacher.password)
         password_check = check_password(password, teacher.password)
-        # print(password_check)
         print(password_check)
         if password_check:
             auth.login(request, teacher)
+        if request.user.has_school:
+            print("Hello>>>>>>>>>>>>>")
+            return redirect(f'/teacher_school_detail/{request.user.teacher_info.first().id}')
+        else:
             print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             return redirect('TeacherMainBody')
         # return render(request, 'teacher_mainbody.html')
@@ -86,12 +99,15 @@ class TeacherLogInView(View):
 class TeacherMainBodyView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            school = School.objects.all()
-            context = {
-                "schools":school,
-            }
-            print(request.user.username)
-            return render(request, 'teacher_mainbody.html', context)
+            if request.user.is_student:
+                return HttpResponse("You are not the correct user to access this page.")
+            else:
+                school = School.objects.all()
+                context = {
+                    "schools":school,
+                }
+                print(request.user.username)
+                return render(request, 'teacher_mainbody.html', context)
         else:
             return redirect("TeacherLogIn")
 
@@ -99,13 +115,18 @@ class TeacherMainBodyView(View):
 class TeacherSchoolDetailedView(View):
     def get(self, request, id):
         if request.user.is_authenticated:
-            school = School.objects.get(id=id)
-            class_name = Classs.objects.filter(id = id)
-            context = {
-                "school":school,
-                "class":class_name,
-            }
-            return render(request, 'teacher_school_detail.html',context)
+            if request.user.is_student:
+                return HttpResponse("You are not the correct user to access this page.")
+            else:
+                # teacher = request.user.teacher_info.first()
+                school = School.objects.get(id=id)
+                class_name = Classs.objects.filter(id = id)
+                context = {
+                    # "teacher":teacher,
+                    "school":school,
+                    "class":class_name,
+                }
+                return render(request, 'teacher_school_detail.html',context)
         else:
             return redirect("TeacherLogIn")
 

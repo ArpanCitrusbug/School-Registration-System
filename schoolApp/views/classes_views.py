@@ -35,3 +35,4 @@ class TeacherStudentUpdateView(UpdateView):
     template_name="update_student.html"
     success_url="/teacher_mainbody"
     fields = '__all__'
+
