@@ -102,7 +102,9 @@ class StudentAccessCodeSearchView(View):
                 class_object = Classs.objects.get(access_code=searched)
                 class_object.student_name.add(student)
             else:
-                class_object = Classs.objects.get(access_code=student.access_token)
+                print(student.access_token)
+                class_object = Classs.objects.filter(access_code=student.access_token).exists()
+                print(class_object)
             student_list = class_object.student_name.filter(is_student=True).values_list("username",flat=True)
             # class_list = 
             teacher_list = class_object.teacher_name.filter(is_student=False).values_list("username",flat=True)

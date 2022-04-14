@@ -29,7 +29,7 @@ class TeacherSignUpView(View):
             if request.user.is_student:
                 return HttpResponse("You are not the correct user to access this page.")
             elif request.user.has_school:
-                return redirect(f'/teacher_school_detail/{request.user.teacher_info.first().id}')   
+                return redirect(f'/teacher_school_detail/{request.user.id}')   
             else:
                 return redirect('TeacherMainBody')   
         else:
@@ -88,7 +88,7 @@ class TeacherLogInView(View):
             auth.login(request, teacher)
         if request.user.has_school:
             print("Hello>>>>>>>>>>>>>")
-            return redirect(f'/teacher_school_detail/{request.user.teacher_info.first().id}')
+            return redirect(f'/teacher_school_detail/{request.user.id}')
         else:
             print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             return redirect('TeacherMainBody')

@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'school_registration_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'StudentApp',
+        'NAME': 'schoolApp',
         'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
