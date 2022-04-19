@@ -7,8 +7,11 @@ from schoolApp.models import *
 
 # Create your views here.
 class IndexView(View):
-    def get(self, request):
-        return render(request,'index.html')
+    def get(self,request):
+        if request.user.is_authenticated:
+            return HttpResponse("Please Logout First")
+        else:
+            return render(request,'index.html')
     # def get(self, request):
     #     if request.user.is_authenticated:
     #         school = School.objects.all()

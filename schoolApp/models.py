@@ -57,9 +57,6 @@ class Student(Teacher):
     age = models.IntegerField(blank=True)
     access_token = models.CharField(max_length=10, null=True,blank=True)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
-
 
 class Classs(models.Model):
     standard = models.IntegerField(blank= True)

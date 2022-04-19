@@ -11,6 +11,7 @@
 
 {% block body %}
 user authenticated: {{request.user.is_authenticated }}
+{{ request.user.username }}
 <form method="post" style="padding-left: 730px;">
     {% csrf_token %}
     <div class="form-group" style="padding-top: 60px;">

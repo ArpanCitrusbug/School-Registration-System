@@ -102,14 +102,16 @@ class StudentAccessCodeSearchView(View):
                 class_object = Classs.objects.get(access_code=searched)
                 class_object.student_name.add(student)
             else:
-                print(student.access_token)
-                class_object = Classs.objects.filter(access_code=student.access_token).exists()
+                # print(student.access_token)
+                class_object = Classs.objects.filter(access_code=student.access_token).values_list('standard',flat=True)
                 print(class_object)
-            student_list = class_object.student_name.filter(is_student=True).values_list("username",flat=True)
-            # class_list = 
-            teacher_list = class_object.teacher_name.filter(is_student=False).values_list("username",flat=True)
-            print(teacher_list)
-            print(student_list)
+                # print(student_name)
+                teacher_list=Classs.objects.filter(access_code=student.access_token).values_list('teacher_name__username',flat=True)
+                student_list=Classs.objects.filter(access_code=student.access_token).values_list('student_name__username',flat=True)
+            # student_list = class_object.student_name.filter(is_student=True).values_list("username",flat=True)
+            # teacher_list = class_object.teacher_name.filter(is_student=False).values_list("username",flat=True)
+            # print(teacher_list)
+            # print(student_list)
             # class_student_list=Student.objects.filter(username__in=student_list)
             
             # class_object_json = serializers.serialize('json', class_object)
