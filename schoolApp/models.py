@@ -61,12 +61,15 @@ class Student(Teacher):
 class Classs(models.Model):
     standard = models.IntegerField(blank= True)
     division = models.CharField(max_length=10)
-    access_code = models.CharField(max_length=10, unique=True)
+    access_code = models.CharField(max_length=10, unique=True, blank=True)
     student_name = models.ManyToManyField(Student,related_name="student_class")
     teacher_name = models.ManyToManyField(Teacher, related_name="teacher_class")
 
     def __str__(self):
         return self.access_code
+    
+    class Meta:
+        verbose_name_plural= "Classes"
 
 
 class School(models.Model):

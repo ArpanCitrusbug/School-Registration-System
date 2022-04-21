@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.contrib import auth
 from schoolApp.models import *
-from schoolApp.forms import UpdateStudentForm
+from schoolApp.forms import UpdateStudentForm,TeacherUpdateStudentForm
 
 
 
@@ -104,6 +104,7 @@ class StudentAccessCodeSearchView(View):
             else:
                 # print(student.access_token)
                 class_object = Classs.objects.filter(access_code=student.access_token).values_list('standard',flat=True)
+                class_object_one = Classs.objects.filter(access_code=student.access_token).values_list('division',flat=True)
                 print(class_object)
                 # print(student_name)
                 teacher_list=Classs.objects.filter(access_code=student.access_token).values_list('teacher_name__username',flat=True)
@@ -119,7 +120,7 @@ class StudentAccessCodeSearchView(View):
             context={
                 "class_student_list_json":student_list,
                 "teacher_list_json":teacher_list,
-                # "class_object_json":class_object_json,
+                "class_object_json":class_object_one,
                 "class_list_json":class_object,
             }
             # return JsonResponse(context,safe=False)
@@ -145,3 +146,41 @@ class StudentUpdateView(View):
         student.email =email
         student.save()
         return redirect(f'/student_mainbody/{id}')
+
+
+class TeacherUpdateStudentView(View):
+    def get(self,request,pk):
+        if request.user.is_authenticated:
+            form = TeacherUpdateStudentForm
+            return render(request, 'update_student.html',{'form':form}) 
+        else:
+            return render(request,'teacherlogin.html')
+
+    def post(self,request,pk):
+        student=Student.objects.get(pk=pk)
+        first_name=request.POST['first_name']
+        last_name=request.POST['last_name']
+        email=request.POST['email']
+        access_token=request.POST['access_token']
+        student.first_name =first_name
+        student.last_name =last_name
+        student.email =email
+        
+        
+        
+        if student.access_token: 
+            print("**************************************************************************")
+            c = Classs.objects.get(access_code = student.access_token)
+            c.student_name.remove(student)
+
+            student.access_token=access_token
+            student.save()   
+            cls = Classs.objects.get(access_code=access_token)
+            cls.student_name.add(student)
+            cls.save()
+        # else:
+        #     student.access_token =access_token
+        #     student.save()   
+        #     cls.student_name = Student.object.add(student)
+        #     cls.save()
+        return redirect('TeacherMainBody')

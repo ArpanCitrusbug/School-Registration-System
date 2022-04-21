@@ -29,10 +29,3 @@ class TeacherClassUpdateView(UpdateView):
     template_name ="classform.html"
     success_url = "/teacher_mainbody"
     fields = '__all__'
-
-class TeacherStudentUpdateView(UpdateView):
-    model=Student
-    template_name="update_student.html"
-    success_url="/teacher_mainbody"
-    fields = '__all__'
-

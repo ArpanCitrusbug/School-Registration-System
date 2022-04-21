@@ -19,3 +19,9 @@ class AddClassForm(ModelForm):
     class Meta:
         model = Classs
         fields = ['standard','division','access_code']
+
+
+class TeacherUpdateStudentForm(ModelForm):
+    class Meta:
+        model = Student
+        fields = ['first_name','last_name','email','access_token']

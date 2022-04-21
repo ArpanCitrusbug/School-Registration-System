@@ -17,12 +17,6 @@ integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jI
 
 
 <h3 style="text-align: center">Teacher's list: <div style="color: red; text-align: center;">{% for i in teacher_list_json %} {{i}}, {% endfor %}</div></h3><br><hr>
-<h3 style="text-align: center">Standard: <div style="color: blue; text-align: center;"> {{class_list_json.standard}} </div></h3><hr>
-<h3 style="text-align: center">Division: <div style="color: green; text-align: center;"> {{class_list_json.division}}</div></h3><hr>
- <h3 style="text-align: center">Student's list: <div style="color: purple; text-align: center;">{% for j in class_student_list_json %} {{j}}, {% endfor %}</div></h3><hr>
-
-
-
-
-
-
+<h3 style="text-align: center">Standard: <div style="color: blue; text-align: center;"> {{class_list_json.first}} </div></h3><hr>
+<h3 style="text-align: center">Division: <div style="color: green; text-align: center;"> {{class_object_json.first}}</div></h3><hr>
+<h3 style="text-align: center">Student's list: <div style="color: purple; text-align: center;">{% for j in class_student_list_json %} {{j}}, {% endfor %}</div></h3><hr>
