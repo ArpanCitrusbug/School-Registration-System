@@ -146,3 +146,41 @@ class TeacherLogout(View):
     def get(self, request):
         auth.logout(request)
         return render(request,'teacherlogin.html')
+
+
+class AdminRemoveTeacherView(View):
+    def get(self,request,username):
+        teacher = Teacher.objects.get(username=username)
+        teacher.has_school= False
+        teacher.delete()
+        teacher.save()
+        print(username + "11111111111111111111111111111111111111111111111111111111111")
+        school = School.objects.all()
+        context= {
+            "teacher":teacher,
+            "school": school
+        }
+        
+        return redirect("/teacher_mainbody",context)
+
+
+class TeacherAddToExistingSchoolView(View):
+    def get(self,request,id):
+        # school = School.objects.get(id=request.user.id)
+        class_detail = Classs.objects.all()
+        teacher = Teacher.objects.get(id=id)
+        # teacher.has_school= True
+        # teacher.save()
+        print(request.user.id)
+        print(teacher , "gerggdfghrthrtbfghrtjhrtfghnrthrtghfher")
+        print(class_detail)
+        # print(school)
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        
+        context= {
+            # "school":school,
+            "teacher":teacher,
+            "class_detail":class_detail,
+        }
+
+        return redirect(f"/teacher_school_detail/{id}",context)

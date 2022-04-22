@@ -16,6 +16,8 @@ urlpatterns = [
     path('teacher_logout/', TeacherLogout.as_view(), name="TeacherLogout"),
     path('teacher_class_update/<pk>',login_required(TeacherClassUpdateView.as_view()),name="TeacherClassUpdate"),
     path('teacher_student_update/<pk>',login_required(TeacherUpdateStudentView.as_view()),name="TeacherUpdateStudent"),
+    path('admin_teacher_remove/<str:username>',login_required(AdminRemoveTeacherView.as_view()),name="AdminRemoveTeacher"),
+    path('teacher_to_existing_school/<int:id>',login_required(TeacherAddToExistingSchoolView.as_view()),name="TeacherAddToExistingSchool"),
 
 
 #Student's URL

@@ -23,6 +23,9 @@ Teacher's HomePage
                     Admin:<a style=" text-decoration: none;" href="">
                         <h3 class="card-category"> {{i.admin_id}}</h2>
                     </a>
+                    {% if not request.user.is_superuser %}
+                    <a href="{% url 'TeacherAddToExistingSchool' i.id %}"><button type="button" class="btn btn-info">Add Yourself</button></a>
+                    {% endif %}
                 </div>
             </div>
         </div>

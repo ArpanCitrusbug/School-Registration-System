@@ -29,3 +29,8 @@ class CreateSchoolView(View):
             
             school.teacher_id.add(request.user)
         return redirect('TeacherMainBody')
+
+
+class TeacherSelectExistingSchoolView(View):
+    def get(self,request):
+        pass

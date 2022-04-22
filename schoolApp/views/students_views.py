@@ -109,14 +109,6 @@ class StudentAccessCodeSearchView(View):
                 # print(student_name)
                 teacher_list=Classs.objects.filter(access_code=student.access_token).values_list('teacher_name__username',flat=True)
                 student_list=Classs.objects.filter(access_code=student.access_token).values_list('student_name__username',flat=True)
-            # student_list = class_object.student_name.filter(is_student=True).values_list("username",flat=True)
-            # teacher_list = class_object.teacher_name.filter(is_student=False).values_list("username",flat=True)
-            # print(teacher_list)
-            # print(student_list)
-            # class_student_list=Student.objects.filter(username__in=student_list)
-            
-            # class_object_json = serializers.serialize('json', class_object)
-            # class_student_list_json = serializers.serialize('json', class_student_list)
             context={
                 "class_student_list_json":student_list,
                 "teacher_list_json":teacher_list,
@@ -178,9 +170,4 @@ class TeacherUpdateStudentView(View):
             cls = Classs.objects.get(access_code=access_token)
             cls.student_name.add(student)
             cls.save()
-        # else:
-        #     student.access_token =access_token
-        #     student.save()   
-        #     cls.student_name = Student.object.add(student)
-        #     cls.save()
         return redirect('TeacherMainBody')
