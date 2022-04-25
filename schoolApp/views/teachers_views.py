@@ -166,19 +166,21 @@ class AdminRemoveTeacherView(View):
 
 class TeacherAddToExistingSchoolView(View):
     def get(self,request,id):
-        # school = School.objects.get(id=request.user.id)
+        school = School.objects.get(id=id)
         class_detail = Classs.objects.all()
-        teacher = Teacher.objects.get(id=id)
-        # teacher.has_school= True
-        # teacher.save()
+        teacher = Teacher.objects.get(id=request.user.id)
+        teacher.has_school= True
+        school.teacher_id.add(teacher)
+
+        school.save()
+        teacher.save()
         print(request.user.id)
-        print(teacher , "gerggdfghrthrtbfghrtjhrtfghnrthrtghfher")
+        print(teacher)
         print(class_detail)
-        # print(school)
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-        
+        print(school)
+
         context= {
-            # "school":school,
+            "school":school,
             "teacher":teacher,
             "class_detail":class_detail,
         }
