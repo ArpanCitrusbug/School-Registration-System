@@ -1,7 +1,7 @@
 from schoolApp.models import *
 from django.shortcuts import render,redirect
 from django.views.generic import *
-from schoolApp.forms import AddClassForm
+from schoolApp.forms import *
 
 
 class TeacherClassCreateView(View):
@@ -24,8 +24,22 @@ class TeacherClassCreateView(View):
         return redirect('TeacherMainBody')    
 
 
-class TeacherClassUpdateView(UpdateView):
-    model=Classs
-    template_name ="classform.html"
-    success_url = "/teacher_mainbody"
-    fields = '__all__'
+class TeacherClassUpdateView(View):
+    def get(self,request,id):
+        if request.user.is_authenticated:
+            form = AddClassForm
+            return render(request, 'update_student.html',{'form':form}) 
+        else:
+            return render(request,'teacherlogin.html')
+
+    def post(self,request,id):
+        print(request.POST)
+        student = Student.objects.get(id=id)
+        standard = request.POST['standard']
+        division = request.POST['division']
+        access_code = request.POST['access_code']
+        student.standard =standard
+        student.division =division
+        student.access_code =access_code
+        student.save()
+        return redirect('TeacherMainBody')

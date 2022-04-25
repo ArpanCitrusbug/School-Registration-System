@@ -23,8 +23,10 @@ Teacher's HomePage
                     Admin:<a style=" text-decoration: none;" href="">
                         <h3 class="card-category"> {{i.admin_id}}</h2>
                     </a>
+                    {% if not request.user.has_school %}
                     {% if not request.user.is_superuser %}
-                    <a href="{% url 'TeacherAddToExistingSchool' i.id %}"><button type="button" class="btn btn-info">Add Yourself</button></a>
+                    <a href="{% url 'TeacherAddToExistingSchool' i.id %}"><button type="button" class="btn btn-info">Join {{i.school_name}}</button></a>
+                    {% endif %}
                     {% endif %}
                 </div>
             </div>

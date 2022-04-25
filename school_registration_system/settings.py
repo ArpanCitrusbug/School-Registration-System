@@ -32,6 +32,8 @@ INSTALLED_APPS = [
 
     #manuelly added
     'schoolApp.apps.SchoolappConfig',
+    'school_api.apps.SchoolApiConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

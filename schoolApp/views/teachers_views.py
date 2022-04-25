@@ -124,6 +124,8 @@ class TeacherSchoolDetailedView(View):
                 # teacher = request.user.teacher_info.first()
                 school = School.objects.get(id=id)
                 class_name = Classs.objects.filter(id = id)
+                print(school)
+                print(class_name)
                 context = {
                     # "teacher":teacher,
                     "school":school,
@@ -186,3 +188,26 @@ class TeacherAddToExistingSchoolView(View):
         }
 
         return redirect(f"/teacher_school_detail/{id}",context)
+
+
+class TeacherAddToExistingClassView(View):
+    def get(self,request,access_code):
+        # school = School.objects.get(id=id)
+        class_detail = Classs.objects.get(access_code=access_code)
+        teacher = Teacher.objects.get(id=request.user.id)
+        class_detail.teacher_name.add(teacher)
+
+
+        # teacher.save()
+        print(request.user.id)
+        print(teacher)
+        print(class_detail)
+        class_detail.save()
+
+        context= {
+            "teacher":teacher,
+            # "school":school,
+            "class_detail":class_detail,
+        }
+
+        return redirect(f"/teacher_mainbody",context)
