@@ -210,4 +210,4 @@ class TeacherAddToExistingClassView(View):
             "class_detail":class_detail,
         }
 
-        return redirect(f"/teacher_mainbody",context)
+        return redirect("/teacher_mainbody",context)
