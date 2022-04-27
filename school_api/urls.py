@@ -3,6 +3,7 @@ from school_api.views.teachers_views import *
 from school_api.views.student_views import *
 from school_api.views.school_views import *
 from school_api.views.class_views import *
+from rest_framework.authtoken.views import obtain_auth_token
 
 
 urlpatterns = [
@@ -21,4 +22,7 @@ urlpatterns = [
     #Class API
     path('classapi/', ClasssAPI.as_view()),
     path('classapi/<int:id>', ClasssAPI.as_view()),
+
+    #Token Authnetication API
+    path('get-token/', obtain_auth_token)
 ]

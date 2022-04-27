@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'schoolApp.apps.SchoolappConfig',
     'school_api.apps.SchoolApiConfig',
     'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ]
 
 LOGIN_URL = "/student_login"
+
+# REST_FRAMEWORK = {
+#     #This meethod applies authentication globally to all the APIs
+#     #To override this global authentication you to derive authentication inside the particular class
+#     'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.BasicAuthentication'],
+#     'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAuthenticated'],
+# }

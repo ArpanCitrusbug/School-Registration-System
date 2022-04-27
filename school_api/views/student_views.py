@@ -1,3 +1,5 @@
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from school_api.serializers import *
 from schoolApp.models import *
@@ -6,6 +8,9 @@ from rest_framework.response import Response
 
 # Student Views
 class StudentAPI(APIView):
+    #This authentication works only in one class
+    # authnetication_classes=[BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
     def get(self,request,id=None,format=None):
         id = id
         if id is not None:
