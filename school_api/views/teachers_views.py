@@ -2,10 +2,15 @@ from rest_framework.views import APIView
 from school_api.serializers import *
 from schoolApp.models import *
 from rest_framework import status
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 # Teacher Views
 class TeacherAPI(APIView):
+    authentication_classes=[JWTAuthentication]
+    permission_classes=[IsAdminUser]
     def get(self,request,id=None,format=None):
         id = id
         if id is not None:
@@ -13,11 +18,11 @@ class TeacherAPI(APIView):
             serializer = TeacherSerializer(teacher)
             return Response(serializer.data)
 
-        teacher = Teacher.objects.all()
+        teacher = Teacher.objects.filter(is_student = False)
         serializer = TeacherSerializer(teacher,many = True)
         return Response(serializer.data)
 
-
+    @csrf_exempt
     def post(self,request,format=None):
         serializer = TeacherSerializer(data=request.data)
         if serializer.is_valid():

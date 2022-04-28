@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'schoolApp.apps.SchoolappConfig',
     'school_api.apps.SchoolApiConfig',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -139,9 +140,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/student_login"
 
-# REST_FRAMEWORK = {
-#     #This meethod applies authentication globally to all the APIs
-#     #To override this global authentication you to derive authentication inside the particular class
-#     'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.BasicAuthentication'],
-#     'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAuthenticated'],
-# }
+REST_FRAMEWORK = {
+                    # This is Basic Authnetication
+    #This meethod applies authentication globally to all the APIs
+    #To override this global authentication you to derive authentication inside the particular class
+    # 'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.BasicAuthentication'],
+    # 'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAuthenticated'],
+
+
+                    # This is JWT Authentication
+    'DEFAULT_AUTHENTICATION_CLASSES':('rest_framework_simplejwt.authentication.JWTAuthentication')
+}
+
+import datetime
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=60),
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(minutes=160),
+}

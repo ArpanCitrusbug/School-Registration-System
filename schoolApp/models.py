@@ -38,9 +38,9 @@ class TeacherManager(BaseUserManager):
 class Teacher(AbstractBaseUser,PermissionsMixin):
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
-    email = models.EmailField(null=True, blank=True, unique=True)
+    email = models.EmailField(unique=True)
     phone = models.CharField(max_length=15)
-    username = models.CharField(max_length=40, blank=True, null=True,default='')
+    username = models.CharField(max_length=40,default='')
     is_student = models.BooleanField(default=False)
     has_school = models.BooleanField(default=False)
 
@@ -92,5 +92,11 @@ class School(models.Model):
 
 @receiver(post_save, sender= settings.AUTH_USER_MODEL)
 def create_auth_token(sender,instance=None, created= False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+
+
+@receiver(post_save, sender= Student)
+def create_auth_token_student(sender,instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)

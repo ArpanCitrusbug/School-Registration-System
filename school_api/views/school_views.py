@@ -2,10 +2,14 @@ from rest_framework.views import APIView
 from school_api.serializers import *
 from schoolApp.models import *
 from rest_framework import status
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 # Teacher Views
 class SchoolAPI(APIView):
+    authentication_classes=[JWTAuthentication]
+    permission_classes=[IsAdminUser]
     def get(self,request,id=None,format=None):
         id = id
         if id is not None:
