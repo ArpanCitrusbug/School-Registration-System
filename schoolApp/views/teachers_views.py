@@ -198,7 +198,6 @@ class TeacherAddToExistingClassView(View):
         class_detail.teacher_name.add(teacher)
 
 
-        # teacher.save()
         print(request.user.id)
         print(teacher)
         print(class_detail)
@@ -206,7 +205,6 @@ class TeacherAddToExistingClassView(View):
 
         context= {
             "teacher":teacher,
-            # "school":school,
             "class_detail":class_detail,
         }
 

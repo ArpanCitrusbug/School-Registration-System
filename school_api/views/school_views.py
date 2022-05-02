@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 # Teacher Views
-class SchoolAPI(APIView):
+class SchoolAPI(mixins.CreateModelMixin,mixins.RetrieveModelMixin,mixins.DestroyModelMixin,mixins.UpdateModelMixin,generics.GenericAPIView):
     # authentication_classes=[JWTAuthentication]
     # permission_classes=[IsAdminUser]
     queryset = School.objects.all()
@@ -16,8 +16,8 @@ class SchoolAPI(APIView):
     def get(self,request,pk):
         return self.retrieve(request)
 
-    def put(self,request,pk):
-        return self.update(request)
+    def patch(self,request,pk):
+        return self.update(request, partial=True)
     
     def delete(self,request,pk):
         return self.destroy(request)
@@ -27,6 +27,9 @@ class SchoolListAPI(mixins.ListModelMixin, generics.GenericAPIView):
     # permission_classes=[IsAdminUser]
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
+
+    def post(self,request):
+        return self.create(request)
     
     def get(self, request):
         return self.list(request)

@@ -8,16 +8,18 @@ from rest_framework.response import Response
 from rest_framework import mixins,generics
 
 # Student Views
-class StudentAPI(APIView):
+class StudentAPI(mixins.CreateModelMixin,mixins.RetrieveModelMixin,mixins.DestroyModelMixin,mixins.UpdateModelMixin,generics.GenericAPIView):
     # This authentication works only in one class
     # authentication_classes=[JWTAuthentication]
     # permission_classes=[IsAuthenticated]
+    queryset = Student.objects.filter(is_student=True)
+    serializer_class = StudentSerializer
 
     def get(self,request,pk):
         return self.retrieve(request)
 
-    def put(self,request,pk):
-        return self.update(request)
+    def patch(self,request,pk):
+        return self.update(request, partial=True)
     
     def delete(self,request,pk):
         return self.destroy(request)
@@ -32,6 +34,8 @@ class StudentListAPI(mixins.ListModelMixin, generics.GenericAPIView):
     def get(self, request):
         return self.list(request)
  
+    def post(self,request):
+        return self.create(request)
 
 
 

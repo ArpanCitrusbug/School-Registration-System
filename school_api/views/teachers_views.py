@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework import mixins,generics
 from school_api.serializers import *
@@ -13,12 +14,14 @@ from rest_framework.response import Response
 class TeacherAPI(mixins.CreateModelMixin,mixins.RetrieveModelMixin,mixins.DestroyModelMixin,mixins.UpdateModelMixin,generics.GenericAPIView):
     # authentication_classes=[JWTAuthentication]
     # permission_classes=[IsAdminUser]
+    queryset = Teacher.objects.filter(is_student=False)
+    serializer_class = TeacherSerializer
 
     def get(self,request,pk):
         return self.retrieve(request)
 
-    def put(self,request,pk):
-        return self.update(request)
+    def patch(self,request,pk):
+        return self.update(request,partial=True)
     
     def delete(self,request,pk):
         return self.destroy(request)
@@ -32,6 +35,40 @@ class TeacherListAPI(mixins.ListModelMixin, generics.GenericAPIView):
     def get(self, request):
         return self.list(request)
  
+    def post(self,request):
+        return self.create(request)
+
+class AdminRemoveTeacherAPI(generics.GenericAPIView, mixins.DestroyModelMixin):
+    queryset = Teacher.objects.filter(is_student=False)
+    serializer_class= SchoolSerializer
+
+    def get(self,request,pk):
+        print(pk)
+        teacher = Teacher.objects.get(pk=pk)
+        teacher.has_school= False
+        teacher.delete()
+        teacher.save()
+        # print(pk + "11111111111111111111111111111111111111111111111111111111111")
+        return JsonResponse("teacher removed successfully", safe=False)
+
+
+    # def get_teacher(self, pk):
+    #     try:
+    #         teacher = Teacher.objects.get(pk=pk)
+    #         return teacher
+    #     except Teacher.DoesNotExist:
+    #         return False
+
+    # @csrf_exempt
+    # def delete(self,request,pk):
+    #     if self.get_teacher():
+    #         teacher=Teacher.objects.get(pk=pk)
+    #         return self.destroy(request)
+    #     else:
+    #         return JsonResponse("Teacher Not Found")
+    
+
+
     # def get(self,request,id=None,format=None):
     #     id = id
     #     if id is not None:

@@ -28,18 +28,19 @@ urlpatterns = [
     # Teacher API
     path('teacher/list/', TeacherListAPI.as_view()),
     path('teacher/<int:pk>/', TeacherAPI.as_view()),
+    path('admin-remove-teacher/<pk>',AdminRemoveTeacherAPI.as_view()),
 
     #Student API
-    path('student/list/', StudentAPI.as_view()),
-    path('student/<int:id>/', StudentAPI.as_view()),
+    path('student/list/', StudentListAPI.as_view()),
+    path('student/<int:pk>/', StudentAPI.as_view()),
 
     #School API
-    path('school/list/', SchoolAPI.as_view()),
-    path('school/<int:id>/', SchoolAPI.as_view()),
+    path('school/list/', SchoolListAPI.as_view()),
+    path('school/<int:pk>/', SchoolAPI.as_view()),
 
     #Class API
-    path('class/list/', ClasssAPI.as_view()),
-    path('class/<int:id>/', ClasssAPI.as_view()),
+    path('class/list/', ClasssListAPI.as_view()),
+    path('class/<int:pk>/', ClasssAPI.as_view()),
 
     #Token Authnetication API
     # path('get-token/simple-token/auth/', obtain_auth_token),
