@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('schoolApp.urls')),
     path('api/',include('school_api.urls')),
+    path('customadmin/',include("custom_admin.urls"))
 ]
 
 schema_view = get_schema_view(
