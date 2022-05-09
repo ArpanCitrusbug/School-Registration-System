@@ -13,9 +13,10 @@
 
     {% block body %}
     <h1 class="sign_in" style="padding: 15px; padding-left: 650px;">Welcome Student Registration Website</h1>
+    <center>
     <a href="{% url 'StudentSignUp' %}"><button type="button" class="btn btn-primary">Student</button></a>
     <a href="{% url 'TeacherSignUp' %}"><button type="button" class="btn btn-secondary">Teacher</button></a>
-
+    </center>
 
 
     {% endblock %}

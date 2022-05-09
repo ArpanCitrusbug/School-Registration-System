@@ -5,7 +5,7 @@ from django import forms
 # from ..forms import ServiceChangeForm
 
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password,check_password
+from django.contrib.auth.hashers import make_password
 
 # -----------------------------------------------------------------------------
 # User

@@ -1,8 +1,6 @@
 from django import forms
-from django.contrib.auth.models import User
+from schoolApp.models import Teacher
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-
-from django.contrib.auth import get_user_model
 
 
 class AccountCreationForm(forms.ModelForm):
@@ -17,7 +15,7 @@ class AccountCreationForm(forms.ModelForm):
     )
 
     class Meta:
-        model = User
+        model = Teacher
         fields = ("email",)
 
     def clean_password2(self):
@@ -49,7 +47,7 @@ class AccountUpdateForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
-        model = User
+        model = Teacher
         fields = ("password",)
 
     def clean_password(self):

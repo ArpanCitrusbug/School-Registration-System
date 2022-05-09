@@ -1,11 +1,11 @@
-from django.contrib.auth.models import User
+from schoolApp.models import Teacher
 from django.contrib import auth
 from django import forms
-from django.contrib.auth.hashers import check_password,make_password
+from django.contrib.auth.hashers import check_password
 
 class CustomLoginForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = Teacher
         fields = [
             'email',
             'password'
@@ -22,12 +22,12 @@ class CustomLoginForm(forms.ModelForm):
         cleaned_data = super(CustomLoginForm,self).clean()
         email = cleaned_data.get('email')
         password = cleaned_data.get('password')
-        if User.objects.filter(email=email).exists():
+        if Teacher.objects.filter(email=email).exists():
             if email is not None and password:
                 
                 self.user_cache=auth.authenticate(self.request,email=email,password=password)
                 print(self.user_cache)
-                user = User.objects.get(email=email)
+                user = Teacher.objects.get(email=email)
                 print(user)
                 print(check_password(user.password,password))
                 if check_password(user.password,password):
