@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.contrib import auth
 from schoolApp.models import *
+from schoolApp.tasks import mail_send_function
 
 # Create your views here.
 class IndexView(View):
@@ -131,6 +132,7 @@ class TeacherSchoolDetailedView(View):
                     "school":school,
                     "class":class_name,
                 }
+                mail_send_function.delay()
                 return render(request, 'teacher_school_detail.html',context)
         else:
             return redirect("TeacherLogIn")

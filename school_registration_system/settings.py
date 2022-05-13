@@ -1,6 +1,7 @@
 from pathlib import Path
 # from schoolApp import models
 import os
+from tkinter import E
 # from django.contrib.auth.middleware import AuthenticationMiddleware
 
 
@@ -132,7 +133,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-#ADDED MANUELLY 
+
+
+
+
+
+
+
+
+#ADDED MANUELLY
 
 AUTH_USER_MODEL = 'schoolApp.Teacher'
 
@@ -188,3 +197,22 @@ SWAGGER_SETTINGS = {
    "is_superuser":False,
    'unauthenticated_user':'django.contrib.auth.models.AnonymousUser',
 }
+
+
+#CELERY_SETTINGS
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'django-db'              #'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
+
+
+# SMTP Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_USER ='sample31730273'
+EMAIL_HOST  = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS =True
+EMAIL_HOST_PASSWORD = "SAMPLE@1999"
+# srwqfgypstnakudc
