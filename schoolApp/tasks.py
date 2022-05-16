@@ -3,8 +3,9 @@ from school_registration_system import settings
 from .models import Teacher
 from django.core.mail import send_mail
 
-@shared_task(bind = True)
-def mail_send_function(self):
+@shared_task()
+def mail_send_function():
+    print("Hello###########################################################")
     teacher = Teacher.objects.filter(is_student=False)
     for i in teacher:
         mail_subject = "Hi!!!! We are testing Celery"

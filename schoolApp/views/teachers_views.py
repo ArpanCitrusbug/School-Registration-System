@@ -132,6 +132,7 @@ class TeacherSchoolDetailedView(View):
                     "school":school,
                     "class":class_name,
                 }
+                print("Hello@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
                 mail_send_function.delay()
                 return render(request, 'teacher_school_detail.html',context)
         else:
