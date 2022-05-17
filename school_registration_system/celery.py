@@ -8,12 +8,15 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'school_registration_system.sett
 app = Celery('school_registration_system',include=['school_registration_system.celery'],broker=settings.CELERY_BROKER_URL,backend=settings.CELERY_BROKER_URL)
 app.config_from_object('django.conf:settings', namespace='CELERY') 
 
-# app.conf.beat_schedule = {
-#     'send_mail' : {
-#         'task':'celeryapp.task.send_email',
-#         'schedule':5,
-#     }
-# }
-
-# Looks up for task modules in Django applications and loads them
 app.autodiscover_tasks()
+app.conf.beat_schedule = {
+    'send_mail' : {
+        'task':'celeryapp.task.send_email',
+        'schedule':5,
+    }
+}
+
+
+@app.task(bind=True)
+def debug_task(self):
+    print('Request: {0!r}'.format(self.request))
