@@ -1,7 +1,7 @@
 from pathlib import Path
 # from schoolApp import models
 import os
-from tkinter import E
+from decouple import config
 # from django.contrib.auth.middleware import AuthenticationMiddleware
 
 
@@ -219,7 +219,8 @@ EMAIL_HOST_PASSWORD = "SAMPLE@1999"
 
 
 #SENDGRID SETTINGS
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+SENDGRID_API_KEY = config('SENDGRID_API_KEY')
+print(SENDGRID_API_KEY)
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'

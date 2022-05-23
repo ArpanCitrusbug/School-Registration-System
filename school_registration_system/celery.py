@@ -9,12 +9,12 @@ app = Celery('school_registration_system',include=['school_registration_system.c
 app.config_from_object('django.conf:settings', namespace='CELERY') 
 
 app.autodiscover_tasks()
-app.conf.beat_schedule = {
-    'send_mail' : {
-        'task':'celeryapp.task.send_email',
-        'schedule':5,
-    }
-}
+# app.conf.beat_schedule = {
+#     'send_mail' : {
+#         'task':'celeryapp.task.send_email',
+#         'schedule':5,
+#     }
+# }
 
 
 @app.task(bind=True)

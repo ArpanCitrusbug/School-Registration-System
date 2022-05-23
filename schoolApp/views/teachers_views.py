@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.contrib import auth
 from schoolApp.models import *
-from schoolApp.tasks import mail_send_function
+from schoolApp.tasks import mail_send_function, sendgrid_mail
 
 # Create your views here.
 class IndexView(View):
@@ -125,6 +125,7 @@ class TeacherSchoolDetailedView(View):
                 # teacher = request.user.teacher_info.first()
                 school = School.objects.get(id=id)
                 class_name = Classs.objects.filter(id = id)
+                # teacher = Teacher.objects.get(id=id)
                 print(school)
                 print(class_name)
                 context = {
@@ -132,8 +133,14 @@ class TeacherSchoolDetailedView(View):
                     "school":school,
                     "class":class_name,
                 }
+                context2 = {
+                    "school_name":school.school_name,
+                    "admin_id":request.user.id,
+                    "username":request.user.username,
+                }
                 # print("Hello@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-                mail_send_function.delay()
+                sendgrid_mail.delay(context2)
+                print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
                 return render(request, 'teacher_school_detail.html',context)
         else:
             return redirect("TeacherLogIn")
