@@ -137,7 +137,7 @@ class TeacherSchoolDetailedView(View):
                     "school_name":school.school_name,
                     "admin_id":request.user.id,
                     "username":request.user.username,
-                }
+                }   
                 # print("Hello@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
                 sendgrid_mail.delay(context2)
                 print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
@@ -161,7 +161,7 @@ class TeacherLogout(View):
 
 
 class AdminRemoveTeacherView(View):
-    def get(self,request,username):
+    def get(self,request,username):                 
         teacher = Teacher.objects.get(username=username)
         teacher.has_school= False
         teacher.delete()

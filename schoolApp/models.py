@@ -46,6 +46,7 @@ class Teacher(AbstractBaseUser,PermissionsMixin):
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    
 
     objects = TeacherManager()
 
